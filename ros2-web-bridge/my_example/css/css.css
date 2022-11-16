@@ -1,0 +1,14 @@
+.box {
+    display: flex;
+    flex-direction: column;
+}
+.box > span {
+    align-items: center;
+}
+.borderbox {
+    border: 1px solid red;
+}
+.bordernonebox {
+    border: 0px;
+    margin: 1px;
+}
