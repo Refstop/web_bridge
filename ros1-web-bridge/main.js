@@ -170,33 +170,33 @@ moveBaseFB.subscribe(function(message) {
 //   console.log("initialPose publish")
 // }
 // // create Goal Pose Topic and msg
-// const creatGoalPose=(pose_x,pose_y,orientation)=>{
-// const goalPose = new ROSLIB.Topic({
-//   ros: ros,
-//   name: '/move_base_simple/goal',
-//   messageType: 'geometry_msgs/PoseStamped'
-// });
+const creatGoalPose=(pose_x,pose_y,orientation)=>{
+const goalPose = new ROSLIB.Topic({
+  ros: ros,
+  name: '/move_base_simple/goal',
+  messageType: 'geometry_msgs/PoseStamped'
+});
 
-// var posestamped_msg = new ROSLIB.Message({
-//   header: {
-//     stamp: {
-//       secs : 0, 
-//       nsecs : 100
-//     },
-//     frame_id : "map"              
-//   },
-//   pose: {
-//     position: {
-//       x : pose_x,
-//       y : pose_y,
-//       z : 0.0
-//     },
-//     orientation: orientation
-//    }
-// });
-//   goalPose.publish(posestamped_msg)
-//   console.log("goalPose publish")
-// }
+var posestamped_msg = new ROSLIB.Message({
+  header: {
+    stamp: {
+      secs : 0, 
+      nsecs : 100
+    },
+    frame_id : "map"              
+  },
+  pose: {
+    position: {
+      x : pose_x,
+      y : pose_y,
+      z : 0.0
+    },
+    orientation: orientation
+   }
+});
+  goalPose.publish(posestamped_msg)
+  console.log("goalPose publish")
+}
 
 
 // // to set MouseMoevEvent after mouseDown event , 

@@ -3,22 +3,26 @@
     <head>
         <meta charset="utf-8" />
 
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+
         <!-- ros2djs -->
         <script type="text/javascript" src="https://static.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
         <script type="text/javascript" src="https://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
         <script type="text/javascript" src="https://static.robotwebtools.org/ros2djs/current/ros2d.min.js"></script>
 
-        <!--roslib-->
+        <!-- roslib -->
         <script src="https://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
         <script src="https://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
 
         <!-- roslibNav -->
         <script type="text/javascript" src="https://static.robotwebtools.org/nav2djs/current/nav2d.js"></script>
 
+        <link rel="stylesheet" href="../css/style.css">
+
         <script type="text/javascript" src="../js/setting.js"></script>
     </head>
     <body>
-        <h1>Simple Test HTML page</h1>
+        <h1>Simple Web Navigation Tool(ROS2)</h1>
         <p>This example will publish and subscribe and do anything</p>
         <div id="statusIndicator">
             <p id="connecting">Connecting to rosbridge</p>
@@ -26,8 +30,27 @@
             <p id="error" style="color:#FF0000; display:none">Error in the backend</p>
             <p id="closed" style="display:none">Connection closed</p>
         </div>
-        <p>Map visualization</p>
-        <p>interaction with map(zoom, click)</p>
+        <p>Map visualization, Interaction with map(zoom, click)</p>
+
+        <div class="wrapper">
+            <p>Set Initial Pose</p>
+            <div>
+                <label class="switch">
+                    <input type="checkbox" id="init">
+                    <span class="slider round"></span>
+                </label>
+                <p id="init_cb_status">OFF</p>
+            </div>
+            <p>Set Goal Pose</p>
+            <div>
+                <label class="switch">
+                    <input type="checkbox" id="goal">
+                    <span class="slider round"></span>
+                </label>
+                <p id="goal_cb_status">OFF</p>
+            </div>
+        </div>
+        <p id="targetpose"> none</p>
         <div id="map"></div>
         <script type="text/javascript" src="../js/main.js"></script>
     </body>
