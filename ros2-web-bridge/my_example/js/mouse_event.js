@@ -1,13 +1,17 @@
 // 토글 스위치를 사용하여, initial pose 모드와 goal pose 모드를 결정
-var check = $("input[type='checkbox']");
-var init_checkbox = document.getElementById("init");
-check.click(function() {
+// var check = $("input[type='checkbox']");
+var init_check = $("input[id='initmode']");
+var init_checkbox = document.getElementById("initmode");
+init_check.click(function() {
     init_checkbox.checked? document.getElementById("init_cb_status").innerText = "ON": document.getElementById("init_cb_status").innerText = "OFF";
+    console.log("init");
 });
 
-var goal_checkbox = document.getElementById("goal");
-check.click(function() {
+var goal_check = $("input[id='goalmode']");
+var goal_checkbox = document.getElementById("goalmode");
+goal_check.click(function() {
     goal_checkbox.checked? document.getElementById("goal_cb_status").innerText = "ON": document.getElementById("goal_cb_status").innerText = "OFF";
+    console.log("goal");
 });
 
 // initial pose와 goal_pose를 publish하는 함수

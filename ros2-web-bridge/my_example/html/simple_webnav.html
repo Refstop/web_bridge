@@ -40,7 +40,7 @@
                 <p>Set Initial Pose</p>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="init">
+                        <input type="checkbox" id="initmode">
                         <span class="slider round"></span>
                     </label>
                     <p id="init_cb_status">OFF</p>
@@ -50,7 +50,7 @@
                 <p>Set Goal Pose</p>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="goal">
+                        <input type="checkbox" id="goalmode">
                         <span class="slider round"></span>
                     </label>
                     <p id="goal_cb_status">OFF</p>
@@ -64,21 +64,21 @@
                 <p>Set Waypoints</p>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="wp">
+                        <input type="checkbox" id="wpmode">
                         <span class="slider round"></span>
                     </label>
                     <p id="wp_cb_status">OFF</p>
                 </div>
             </div>
             <div>
-                <button type="button" id="completebtn">Complete!</button>
+                <button type="button" id="completebtn">Record complete!</button>
             </div>
         </div>
         <div id="map"></div>
         <script type="text/javascript" src="../js/ros2dmap.js"></script>
         <script type="text/javascript" src="../js/robot_viz.js"></script>
         <script type="text/javascript" src="../js/mouse_event.js"></script>
-        <!-- <script type="text/javascript" src="../js/waypoint_navigation.js"></script> -->
+        <script type="text/javascript" src="../js/waypoint_navigation.js"></script>
         <script type="text/javascript" src="../js/main.js"></script>
     </body>
 </html>
