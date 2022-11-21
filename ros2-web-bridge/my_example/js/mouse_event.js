@@ -145,10 +145,26 @@ var mouseEventHandler = function(event, mouseState, operMode) {
             createInitialPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
         } else if(operMode == "goal") {
             createGoalPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
+        } else if(operMode == "wpsave") {
+            // createWaypoints(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
+            var qz = Math.sin(-thetaRad/2.0);
+            var qw = Math.cos(-thetaRad/2.0);
+            var orientation = new ROSLIB.Quaternion({
+                x: 0, y: 0, z: qz, w: qw
+            });
+            wp_array.push({
+                position: {
+                    x: mouseDownPose.position.x,
+                    y:mouseDownPose.position.y,
+                    z: 0
+                },
+                orientation: orientation
+            })
         }
     }
 }
 
+// waypoint handler 추가
 viewer.scene.addEventListener("stagemousedown", function(event) {
     if(init_checkbox.checked) {
         mouseEventHandler(event, "down", "initial");
@@ -157,7 +173,7 @@ viewer.scene.addEventListener("stagemousedown", function(event) {
             mouseEventHandler(event, "down", "goal");
         }
     }
-})
+});
 
 viewer.scene.addEventListener("stagemousemove", function(event) {
     if(init_checkbox.checked) {
