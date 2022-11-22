@@ -27,7 +27,11 @@ const createWaypoints = () => {
         poses: wp_array
     });
     wparray.publish(wparray_msg);
-    // document.getElementById("targetpose").innerText = " goal_pose => px: " + String(pose_x) + " py: " + String(pose_y);
     wp_checkbox.checked = !wp_checkbox.checked;
     wp_checkbox.checked? document.getElementById("wp_cb_status").innerText = "ON": document.getElementById("wp_cb_status").innerText = "OFF"; // wp_cb_status 추가
+    wp_array = [];
+};
+
+document.getElementById("completebtn").onclick = function () {
+    createWaypoints();
 };

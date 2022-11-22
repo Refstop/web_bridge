@@ -146,7 +146,7 @@ var mouseEventHandler = function(event, mouseState, operMode) {
         } else if(operMode == "goal") {
             createGoalPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
         } else if(operMode == "wpsave") {
-            // createWaypoints(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
+            console.log("saved")
             var qz = Math.sin(-thetaRad/2.0);
             var qw = Math.cos(-thetaRad/2.0);
             var orientation = new ROSLIB.Quaternion({
@@ -160,6 +160,7 @@ var mouseEventHandler = function(event, mouseState, operMode) {
                 },
                 orientation: orientation
             })
+            document.getElementById("completebtn").innerText = "Play!!\nLength: " + String(wp_array.length);
         }
     }
 }
@@ -173,6 +174,9 @@ viewer.scene.addEventListener("stagemousedown", function(event) {
             mouseEventHandler(event, "down", "goal");
         }
     }
+    if(wp_checkbox.checked) {
+        mouseEventHandler(event, "down", "wpsave");
+    }
 });
 
 viewer.scene.addEventListener("stagemousemove", function(event) {
@@ -183,6 +187,9 @@ viewer.scene.addEventListener("stagemousemove", function(event) {
             mouseEventHandler(event, "move", "goal");
         }
     }
+    if(wp_checkbox.checked) {
+        mouseEventHandler(event, "move", "wpsave");
+    }
 });
 
 viewer.scene.addEventListener("stagemouseup", function(event) {
@@ -192,5 +199,8 @@ viewer.scene.addEventListener("stagemouseup", function(event) {
         if(goal_checkbox.checked) {
             mouseEventHandler(event, "up", "goal");
         }
+    }
+    if(wp_checkbox.checked) {
+        mouseEventHandler(event, "up", "wpsave");
     }
 });
