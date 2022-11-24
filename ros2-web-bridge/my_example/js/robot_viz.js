@@ -1,3 +1,6 @@
+head_namespace = "omo"
+tail_namespace = ""
+
 // robot의 pose를 arrow로 visualize하는 파트
 var robotMarker = new ROS2D.NavigationArrow({
     size : 0.3,
@@ -16,7 +19,7 @@ const createPoseTopic = (operatingMode) => {
     } else if(operatingMode == "nav") {
         const navPoseTopic = new ROSLIB.Topic({
             ros: ros,
-            name: "/amcl_pose",
+            name: head_namespace + "/amcl_pose",
             messageType: "geometry_msgs/PoseWithCovarianceStamped"
         });
         return navPoseTopic;
@@ -57,3 +60,24 @@ const createFunc = function(poseTopic, robotMarker, operatingMode) {
         gridClient.rootObject.addChild(robotMarker);
     });
 }
+
+// path 시각화
+var listenerforPath = new ROSLIB.Topic ({
+    ros : ros,
+    name : head_namespace + '/local_plan',
+    messageType : 'nav_msgs/Path'
+});
+gridClient.rootObject.addChild(pathShape);
+
+var pathShape = new ROS2D.PathShape({
+    strokeSize : 0.1,
+    strokeColor : createjs.Graphics.getRGB(0, 255, 0,1),
+});
+    
+gridClient.rootObject.addChild(pathShape);
+
+listenerforPath.subscribe((message)=> {
+    if(message) {
+        pathShape.setPath(message);
+    }
+});

@@ -8,7 +8,7 @@ ros.on("error", function(error) {
     document.getElementById("closed").style.display = "none";
     document.getElementById("error").style.display = "inline";
     console.log(error);
-})
+});
 
 ros.on("connection", function() {
     console.log("Connection made!");
@@ -23,7 +23,7 @@ ros.on("close", function() {
     document.getElementById("connecting").style.display = "none";
     document.getElementById("connected").style.display = "none";
     document.getElementById("closed").style.display = "inline";
-})
+});
 
 // rosbridge websocket 서버와 연결을 생성
 ros.connect("ws://localhost:9090");

@@ -19,9 +19,9 @@ ros.on('close', function() {
 
 // pathShape
 var listenerforPath = new ROSLIB.Topic ({
-ros : ros,
-name : '/move_base/NavfnROS/plan',
-messageType : 'nav_msgs/Path'
+  ros : ros,
+  name : '/move_base/NavfnROS/plan',
+  messageType : 'nav_msgs/Path'
 });
 
 // TraceShape

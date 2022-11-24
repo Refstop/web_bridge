@@ -1,25 +1,49 @@
 // 토글 스위치를 사용하여, initial pose 모드와 goal pose 모드를 결정
-// var check = $("input[type='checkbox']");
-var init_check = $("input[id='initmode']");
-var init_checkbox = document.getElementById("initmode");
-init_check.click(function() {
-    init_checkbox.checked? document.getElementById("init_cb_status").innerText = "ON": document.getElementById("init_cb_status").innerText = "OFF";
-    console.log("init");
+var head_init_check = $("input[id='head_initmode']");
+var head_init_checkbox = document.getElementById("head_initmode");
+var head_init_cb_status = document.getElementById("head_init_cb_status");
+head_init_check.click(function() {
+    head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
+    if(head_init_checkbox.checked) tail_init_checkbox.checked = false;
 });
 
-var goal_check = $("input[id='goalmode']");
-var goal_checkbox = document.getElementById("goalmode");
-goal_check.click(function() {
-    goal_checkbox.checked? document.getElementById("goal_cb_status").innerText = "ON": document.getElementById("goal_cb_status").innerText = "OFF";
-    console.log("goal");
+var head_goal_check = $("input[id='head_goalmode']");
+var head_goal_checkbox = document.getElementById("head_goalmode");
+var head_goal_cb_status = document.getElementById("head_goal_cb_status");
+head_goal_check.click(function() {
+    head_goal_checkbox.checked? head_goal_cb_status.innerText = "ON": head_goal_cb_status.innerText = "OFF";
+    if(head_goal_checkbox.checked) tail_goal_checkbox.checked = false;
+});
+
+var tail_init_check = $("input[id='tail_initmode']");
+var tail_init_checkbox = document.getElementById("tail_initmode");
+var tail_init_cb_status = document.getElementById("tail_init_cb_status");
+tail_init_check.click(function() {
+    tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
+    if(tail_init_checkbox.checked) head_init_checkbox.checked = false;
+});
+
+var tail_goal_check = $("input[id='tail_goalmode']");
+var tail_goal_checkbox = document.getElementById("tail_goalmode");
+var tail_goal_cb_status = document.getElementById("tail_goal_cb_status")
+tail_goal_check.click(function() {
+    tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
+    if(tail_goal_checkbox.checked) head_goal_checkbox.checked = false;
 });
 
 // initial pose와 goal_pose를 publish하는 함수
-const createInitialPose = (pose_x, pose_y, thetaRad)=>{
-    if(!init_checkbox.checked) return;
+var status_area = document.getElementById("status_area");
+const createInitialPose = (pose_x, pose_y, thetaRad) => {
+    if(head_init_checkbox.checked) {
+        var robot_type = head_namespace;
+    } else if(tail_init_checkbox.checked) {
+        var robot_type = tail_namespace;
+    } else if(!head_init_checkbox.checked) {
+        return;
+    }
     const initialPose = new ROSLIB.Topic({
         ros: ros,
-        name: "/initialpose",
+        name: robot_type + "/initialpose",
         messageType: "geometry_msgs/PoseWithCovarianceStamped"
     });
 
@@ -49,18 +73,32 @@ const createInitialPose = (pose_x, pose_y, thetaRad)=>{
             covariance: [0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06853892326654787]
         }
     });
-    // gridClient.rootObject.addChild(LaserScan);
     initialPose.publish(initialpose_msg);
-    document.getElementById("targetpose").innerText = " initialpose => px: " + String(pose_x) + " py: " + String(pose_y);
-    init_checkbox.checked = !init_checkbox.checked;
-    init_checkbox.checked? document.getElementById("init_cb_status").innerText = "ON": document.getElementById("init_cb_status").innerText = "OFF";
+    var str = robot_type + " 초기 Pose: " + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+    status_area.value += str;
+    status_area.scrollTop = status_area.scrollHeight;
+    // head_init_checkbox.checked = !head_init_checkbox.checked;
+    // head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
+    if(head_init_checkbox.checked) {
+        head_init_checkbox.checked = !head_init_checkbox.checked;
+        head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
+    } else if(tail_init_checkbox.checked) {
+        tail_init_checkbox.checked = !tail_init_checkbox.checked;
+        tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
+    }
 };
 
 const createGoalPose = (pose_x, pose_y, thetaRad) => {
-    if(!goal_checkbox.checked) return;
+    if(head_goal_checkbox.checked) {
+        var robot_type = head_namespace;
+    } else if(tail_goal_checkbox.checked) {
+        var robot_type = tail_namespace;
+    } else if(!head_goal_checkbox.checked) {
+        return;
+    } 
     const goal_pose = new ROSLIB.Topic({
         ros: ros,
-        name: "/goal_pose",
+        name: robot_type + "/goal_pose",
         messageType: "geometry_msgs/PoseStamped"
     });
 
@@ -88,50 +126,53 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         }
     });
     goal_pose.publish(goal_pose_msg);
-    document.getElementById("targetpose").innerText = " goal_pose => px: " + String(pose_x) + " py: " + String(pose_y);
-    goal_checkbox.checked = !goal_checkbox.checked;
-    goal_checkbox.checked? document.getElementById("goal_cb_status").innerText = "ON": document.getElementById("goal_cb_status").innerText = "OFF";
+    var str = robot_type + " 목표 Pose: " + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+    status_area.value += str;
+    status_area.scrollTop = status_area.scrollHeight;
+    // head status: 배송 중/배송 대기/배송 완료
+    // tail status: 배송 중/배송 완료
+    // head 배송 시작(tail 추종 중)-head 배송 중-head 도착-tail 출발-head 배송 대기-tail 배송 중
+    // -(사용자 확인)-tail 배송 완료-tail 복귀 중-tail 복귀 완료-head 배송 완료
+    if(head_goal_checkbox.checked) {
+        head_goal_checkbox.checked = !head_goal_checkbox.checked;
+        head_goal_checkbox.checked? head_goal_cb_status.innerText = "ON": head_goal_cb_status.innerText = "OFF";
+    } else if(tail_goal_checkbox.checked) {
+        tail_goal_checkbox.checked = !tail_goal_checkbox.checked;
+        tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
+    }
+    
 };
 
 // mouse 이벤트를 통해 initial pose와 goal pose를 publish하는 함수를 실행
 let mouseDown = false;
 let mouseDownPose = {};
 
-// var targetMarker = new ROS2D.NavigationArrow({
-//     size : 0.3,
-//     strokeSize : 0.01,
-//     fillColor: createjs.Graphics.getRGB(0, 255, 0, 0.9),
-// });
+var targetMarker = new ROS2D.NavigationArrow({
+    size : 0.3,
+    strokeSize : 0.01,
+    fillColor: createjs.Graphics.getRGB(0, 255, 0, 0.9),
+});
 
 var mouseEventHandler = function(event, mouseState, operMode) {
     // console.log("mouseState: " + mouseState);
     if(mouseState == "down") {
         mouseDown = true;
-        // console.log("mouse down");
         // get position when mouse button is pressed down
         mouseDownPosition = viewer.scene.globalToRos(event.stageX, event.stageY);
         mouseDownPositionVec3 = new ROSLIB.Vector3(mouseDownPosition);
         mouseDownPose = new ROSLIB.Pose({
             position: new ROSLIB.Vector3(mouseDownPositionVec3)
         });
-        console.log(mouseDownPose.position);
     }
     else if(mouseState === "move" && mouseDown) {
-        // console.log("mouse move");
         // remove obsolete orientation marker
-        gridClient.rootObject.removeChild(robotMarker)
-    }
-    else if(mouseState === "up" && mouseDown) {
-        mouseDown = false;
-        mouseUpPosition = viewer.scene.globalToRos(event.stageX, event.stageY);
-        mouseUpPositionVec3 = new ROSLIB.Vector3(mouseUpPosition);
-        const mouseUpPose = new ROSLIB.Pose({
-            position: new ROSLIB.Vector3(mouseUpPositionVec3)
+        mouseMovePosition = viewer.scene.globalToRos(event.stageX, event.stageY);
+        mouseMovePositionVec3 = new ROSLIB.Vector3(mouseMovePosition);
+        const mouseMovePose = new ROSLIB.Pose({
+            position: new ROSLIB.Vector3(mouseMovePositionVec3)
         });
-
-        // upPose - DownPose
-        xDelta = mouseUpPose.position.x - mouseDownPose.position.x
-        yDelta = mouseUpPose.position.y - mouseDownPose.position.y
+        xDelta = mouseMovePose.position.x - mouseDownPose.position.x
+        yDelta = mouseMovePose.position.y - mouseDownPose.position.y
         thetaRad = Math.atan2(xDelta, yDelta);
         thetaDeg = thetaRad * (180.0/Math.PI);
         if(thetaRad >= 0 && thetaRad <= Math.PI) {
@@ -139,14 +180,21 @@ var mouseEventHandler = function(event, mouseState, operMode) {
         } else {
             thetaRad -= Math.PI/2;
         }
-        // gridClient.rootObject.addChild(targetMarker);
+
+        targetMarker.x = mouseDownPose.position.x;
+        targetMarker.y = -mouseDownPose.position.y;
+        targetMarker.rotation = thetaRad * 180.0 / Math.PI;
+        gridClient.rootObject.addChild(targetMarker);
+        
+    }
+    else if(mouseState === "up" && mouseDown) {
+        mouseDown = false;
 
         if(operMode == "initial") {
             createInitialPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
         } else if(operMode == "goal") {
             createGoalPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
         } else if(operMode == "wpsave") {
-            console.log("saved")
             var qz = Math.sin(-thetaRad/2.0);
             var qw = Math.cos(-thetaRad/2.0);
             var orientation = new ROSLIB.Quaternion({
@@ -159,20 +207,25 @@ var mouseEventHandler = function(event, mouseState, operMode) {
                     z: 0
                 },
                 orientation: orientation
-            })
-            document.getElementById("completebtn").innerText = "Play!!\nLength: " + String(wp_array.length);
+            });
+            var str = String(wp_array.length) + "번째 waypoint 저장됨\n";
+            status_area.value += str;
+            status_area.scrollTop = status_area.scrollHeight;
         }
+        gridClient.rootObject.removeChild(targetMarker);
     }
 }
 
 // waypoint handler 추가
 viewer.scene.addEventListener("stagemousedown", function(event) {
-    if(init_checkbox.checked) {
+    if(head_init_checkbox.checked) {
         mouseEventHandler(event, "down", "initial");
-    } else {
-        if(goal_checkbox.checked) {
-            mouseEventHandler(event, "down", "goal");
-        }
+    } else if(head_goal_checkbox.checked) {        
+        mouseEventHandler(event, "down", "goal");
+    } else if(tail_init_checkbox.checked) {    
+        mouseEventHandler(event, "down", "initial");
+    } else if(tail_goal_checkbox.checked) {        
+        mouseEventHandler(event, "down", "goal");
     }
     if(wp_checkbox.checked) {
         mouseEventHandler(event, "down", "wpsave");
@@ -180,12 +233,14 @@ viewer.scene.addEventListener("stagemousedown", function(event) {
 });
 
 viewer.scene.addEventListener("stagemousemove", function(event) {
-    if(init_checkbox.checked) {
+    if(head_init_checkbox.checked) {
         mouseEventHandler(event, "move", "initial");
-    } else {
-        if(goal_checkbox.checked) {
-            mouseEventHandler(event, "move", "goal");
-        }
+    } else if(head_goal_checkbox.checked) {        
+        mouseEventHandler(event, "move", "goal");
+    } else if(tail_init_checkbox.checked) {    
+        mouseEventHandler(event, "move", "initial");
+    } else if(tail_goal_checkbox.checked) {        
+        mouseEventHandler(event, "move", "goal");
     }
     if(wp_checkbox.checked) {
         mouseEventHandler(event, "move", "wpsave");
@@ -193,12 +248,14 @@ viewer.scene.addEventListener("stagemousemove", function(event) {
 });
 
 viewer.scene.addEventListener("stagemouseup", function(event) {
-    if(init_checkbox.checked) {
+    if(head_init_checkbox.checked) {
         mouseEventHandler(event, "up", "initial");
-    } else {
-        if(goal_checkbox.checked) {
-            mouseEventHandler(event, "up", "goal");
-        }
+    } else if(head_goal_checkbox.checked) {        
+        mouseEventHandler(event, "up", "goal");
+    } else if(tail_init_checkbox.checked) {    
+        mouseEventHandler(event, "up", "initial");
+    } else if(tail_goal_checkbox.checked) {        
+        mouseEventHandler(event, "up", "goal");
     }
     if(wp_checkbox.checked) {
         mouseEventHandler(event, "up", "wpsave");

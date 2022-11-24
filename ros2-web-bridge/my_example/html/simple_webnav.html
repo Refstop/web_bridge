@@ -30,52 +30,95 @@
             <p id="error" style="color:#FF0000; display:none">Error in the backend</p>
             <p id="closed" style="display:none">Connection closed</p>
         </div>
-        <p>Functions:</p><br>
-        <p>Map visualization</p><br>
-        <p>Set initial & goal pose</p><br>
-        <p>Waypoint navigation(proceeding)</p><br>
-        <p></p>
-
-        <div id="setpose">
-            <div id="setinitpose">
-                <p>Set Initial Pose</p>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" id="initmode">
-                        <span class="slider round"></span>
-                    </label>
-                    <p id="init_cb_status">OFF</p>
-                </div>
-            </div>
-            <div id="setgoalpose">
-                <p>Set Goal Pose</p>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" id="goalmode">
-                        <span class="slider round"></span>
-                    </label>
-                    <p id="goal_cb_status">OFF</p>
-                </div>
-            </div>
-            <p id="targetpose"> none</p>
-        </div>
-        
-        <div id="waypoint">
-            <div id="setwaypoint">
-                <p>Set Waypoints</p>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" id="wpmode">
-                        <span class="slider round"></span>
-                    </label>
-                    <p id="wp_cb_status">OFF</p>
-                </div>
-            </div>
+        <div id="fullbody">
+            <div id="map"></div>
             <div>
-                <button type="button" id="completebtn">Play!!<br>length: ??</button>
+                <h3>Pose 설정 모드</h3>
+                <p>부모 로봇</p>
+                <div class="setpose">
+                    <div class="setinitpose">
+                        <p>초기 Pose 설정</p>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="head_initmode">
+                                <span class="slider round"></span>
+                            </label>
+                            <p id="head_init_cb_status">OFF</p>
+                        </div>
+                    </div>
+                    <div class="setgoalpose">
+                        <p>목표 Pose 설정</p>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="head_goalmode">
+                                <span class="slider round"></span>
+                            </label>
+                            <p id="head_goal_cb_status">OFF</p>
+                        </div>
+                    </div>
+                </div>
+                <p>자식 로봇</p>
+                <div class="setpose">
+                    <div class="setinitpose">
+                        <p>초기 Pose 설정</p>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="tail_initmode">
+                                <span class="slider round"></span>
+                            </label>
+                            <p id="tail_init_cb_status">OFF</p>
+                        </div>
+                    </div>
+                    <div class="setgoalpose">
+                        <p>목표 Pose 설정</p>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="tail_goalmode">
+                                <span class="slider round"></span>
+                            </label>
+                            <p id="tail_goal_cb_status">OFF</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="waypoint">
+                    <div>
+                        <p>Waypoints 기록</p>
+                        <div id="setwaypoint">
+                            <div>
+                                <label class="switch">
+                                    <input type="checkbox" id="wpmode">
+                                    <span class="slider round"></span>
+                                </label>
+                                <p id="wp_cb_status">OFF</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" id="completebtn">주행 시작</button>
+                        <button type="button" id="clearbtn">지우기</button>
+                    </div>
+                </div>
+                
+                <h3>Robot Status</h3>
+                <table class="tg">
+                    <thead>
+                        <tr>
+                            <th class="tg-0pky"></th>
+                            <th class="tg-0pky" id="head_name">부모 로봇</th>
+                            <th class="tg-0pky" id="tail_name">자식 로봇</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tg-0pky">상태</td>
+                            <td class="tg-0pky" id="head_state">연결 안됨</td>
+                            <td class="tg-0pky" id="tail_state">연결 안됨</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <textarea cols="35" rows="10" readonly="readonly" id="status_area"></textarea>
             </div>
         </div>
-        <div id="map"></div>
         <script type="text/javascript" src="../js/ros2dmap.js"></script>
         <script type="text/javascript" src="../js/robot_viz.js"></script>
         <script type="text/javascript" src="../js/mouse_event.js"></script>

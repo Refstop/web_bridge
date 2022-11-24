@@ -1,4 +1,8 @@
 /* The switch - the box around the slider */
+#fullbody {
+    display: flex;
+}
+
 .switch {
     position: relative;
     display: inline-block;
@@ -65,15 +69,19 @@ p {
     font-weight:bold;
 }
 
-#setpose {
-    display: flex;
-}
-
-#setinitpose {
+#map {
     margin: 0px 20px 0px 0px;
 }
 
-#setgoalpose {
+.setpose {
+    display: flex;
+}
+
+.setinitpose {
+    margin: 0px 20px 0px 0px;
+}
+
+.setgoalpose {
     margin: 0px 20px 0px 0px;
 }
 
@@ -87,6 +95,50 @@ p {
 
 #completebtn {
     width: 100px;
-    height: 60px;
+    height: 28px;
+    margin: 5px 2px 2px 2px;
+}
+
+#clearbtn {
+    width: 100px;
+    height: 28px;
     margin: 2px 2px 2px 2px;
+}
+
+.tg {
+    width: 255px;
+    height: 100px;
+    border-collapse:  collapse;
+    border-spacing: 0;
+    margin: 0px 0px 10px 0px;
+}
+.tg td {
+    border-color:black;
+    border-style:solid;
+    border-width: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+    padding: 10px 5px;
+    word-break: normal;
+}
+.tg th {
+    border-color:black;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    overflow: hidden;
+    padding: 10px 5px;
+    word-break: normal;
+}
+.tg .tg-0pky {
+    border-color: inherit;
+    text-align: center;
+    vertical-align: center
+}
+
+#status_area {
+    overflow-y: scroll;
 }
