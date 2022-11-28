@@ -1,6 +1,6 @@
 // ROS web socket server configuration
 
-var ros = new ROSLIB.Ros(); // rosbridge의 주소?? 정확한 설명 모름
+let ros = new ROSLIB.Ros(); // rosbridge의 주소?? 정확한 설명 모름
 
 ros.on("error", function(error) {
     document.getElementById("connecting").style.display = "none";
@@ -30,3 +30,4 @@ ros.connect("ws://localhost:9090");
 
 head_namespace = "omo"
 tail_namespace = ""
+

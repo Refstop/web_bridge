@@ -1,43 +1,44 @@
 // 토글 스위치를 사용하여, initial pose 모드와 goal pose 모드를 결정
-var head_init_check = $("input[id='head_initmode']");
-var head_init_checkbox = document.getElementById("head_initmode");
-var head_init_cb_status = document.getElementById("head_init_cb_status");
+let head_init_check = $("input[id='head_initmode']");
+let head_init_checkbox = document.getElementById("head_initmode");
+let head_init_cb_status = document.getElementById("head_init_cb_status");
 head_init_check.click(function() {
     head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
     if(head_init_checkbox.checked) tail_init_checkbox.checked = false;
 });
 
-var head_goal_check = $("input[id='head_goalmode']");
-var head_goal_checkbox = document.getElementById("head_goalmode");
-var head_goal_cb_status = document.getElementById("head_goal_cb_status");
+let head_goal_check = $("input[id='head_goalmode']");
+let head_goal_checkbox = document.getElementById("head_goalmode");
+let head_goal_cb_status = document.getElementById("head_goal_cb_status");
 head_goal_check.click(function() {
     head_goal_checkbox.checked? head_goal_cb_status.innerText = "ON": head_goal_cb_status.innerText = "OFF";
     if(head_goal_checkbox.checked) tail_goal_checkbox.checked = false;
 });
 
-var tail_init_check = $("input[id='tail_initmode']");
-var tail_init_checkbox = document.getElementById("tail_initmode");
-var tail_init_cb_status = document.getElementById("tail_init_cb_status");
+let tail_init_check = $("input[id='tail_initmode']");
+let tail_init_checkbox = document.getElementById("tail_initmode");
+let tail_init_cb_status = document.getElementById("tail_init_cb_status");
 tail_init_check.click(function() {
     tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
     if(tail_init_checkbox.checked) head_init_checkbox.checked = false;
 });
 
-var tail_goal_check = $("input[id='tail_goalmode']");
-var tail_goal_checkbox = document.getElementById("tail_goalmode");
-var tail_goal_cb_status = document.getElementById("tail_goal_cb_status")
+let tail_goal_check = $("input[id='tail_goalmode']");
+let tail_goal_checkbox = document.getElementById("tail_goalmode");
+let tail_goal_cb_status = document.getElementById("tail_goal_cb_status")
 tail_goal_check.click(function() {
     tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
     if(tail_goal_checkbox.checked) head_goal_checkbox.checked = false;
 });
 
 // initial pose와 goal_pose를 publish하는 함수
-var status_area = document.getElementById("status_area");
+let status_area = document.getElementById("status_area");
 const createInitialPose = (pose_x, pose_y, thetaRad) => {
+    let robot_type = "";
     if(head_init_checkbox.checked) {
-        var robot_type = head_namespace;
+        robot_type = head_namespace;
     } else if(tail_init_checkbox.checked) {
-        var robot_type = tail_namespace;
+        robot_type = tail_namespace;
     } else {
         return;
     }
@@ -48,13 +49,13 @@ const createInitialPose = (pose_x, pose_y, thetaRad) => {
         messageType: "geometry_msgs/PoseWithCovarianceStamped"
     });
 
-    var qz = Math.sin(-thetaRad/2.0);
-    var qw = Math.cos(-thetaRad/2.0);
-    var orientation = new ROSLIB.Quaternion({
+    let qz = Math.sin(-thetaRad/2.0);
+    let qw = Math.cos(-thetaRad/2.0);
+    let orientation = new ROSLIB.Quaternion({
         x: 0, y: 0, z: qz, w: qw
     });
 
-    var initialpose_msg = new ROSLIB.Message({
+    let initialpose_msg = new ROSLIB.Message({
         header: {
             stamp: {
                 sec: 0,
@@ -75,13 +76,12 @@ const createInitialPose = (pose_x, pose_y, thetaRad) => {
         }
     });
     initialPose.publish(initialpose_msg);
-    var cur_namespace = robot_type == head_namespace? "head": "tail";
-    var str = cur_namespace + " 초기 Pose: "
+    let cur_namespace = robot_type == head_namespace? "head": "tail";
+    let str = cur_namespace + " 초기 Pose: "
                 + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
     status_area.value += str;
     status_area.scrollTop = status_area.scrollHeight;
-    // head_init_checkbox.checked = !head_init_checkbox.checked;
-    // head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
+    
     if(head_init_checkbox.checked) {
         head_init_checkbox.checked = !head_init_checkbox.checked;
         head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
@@ -92,10 +92,16 @@ const createInitialPose = (pose_x, pose_y, thetaRad) => {
 };
 
 const createGoalPose = (pose_x, pose_y, thetaRad) => {
+    let robot_type = "";
     if(head_goal_checkbox.checked) {
-        var robot_type = head_namespace;
+        robot_type = head_namespace;
     } else if(tail_goal_checkbox.checked) {
-        var robot_type = tail_namespace;
+        robot_type = tail_namespace;
+    } else if(head_nav) {
+        // robot_type = head_namespace;
+        robot_type = tail_namespace;
+    } else if(tail_nav == "navigating") {
+        robot_type = tail_namespace;
     } else {
         return;
     }
@@ -106,13 +112,13 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         messageType: "geometry_msgs/PoseStamped"
     });
 
-    var qz = Math.sin(-thetaRad/2.0);
-    var qw = Math.cos(-thetaRad/2.0);
-    var orientation = new ROSLIB.Quaternion({
+    let qz = Math.sin(-thetaRad/2.0);
+    let qw = Math.cos(-thetaRad/2.0);
+    let orientation = new ROSLIB.Quaternion({
         x: 0, y: 0, z: qz, w: qw
     });
 
-    var goal_pose_msg = new ROSLIB.Message({
+    let goal_pose_msg = new ROSLIB.Message({
         header: {
             stamp: {
                 sec: 0,
@@ -130,8 +136,8 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         }
     });
     goal_pose.publish(goal_pose_msg);
-    var cur_namespace = robot_type == head_namespace? "head": "tail";
-    var str = cur_namespace + " 목표 Pose: "
+    let cur_namespace = robot_type == head_namespace? "head": "tail";
+    let str = cur_namespace + " 목표 Pose: "
                 + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
     status_area.value += str;
     status_area.scrollTop = status_area.scrollHeight;
@@ -146,20 +152,19 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         tail_goal_checkbox.checked = !tail_goal_checkbox.checked;
         tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
     }
-    
 };
 
 // mouse 이벤트를 통해 initial pose와 goal pose를 publish하는 함수를 실행
 let mouseDown = false;
 let mouseDownPose = {};
 
-var targetMarker = new ROS2D.NavigationArrow({
+let targetMarker = new ROS2D.NavigationArrow({
     size : 0.3,
     strokeSize : 0.01,
     fillColor: createjs.Graphics.getRGB(0, 255, 0, 0.9),
 });
 
-var mouseEventHandler = function(event, mouseState, operMode) {
+let mouseEventHandler = function(event, mouseState, operMode) {
     // console.log("mouseState: " + mouseState);
     if(mouseState == "down") {
         mouseDown = true;
@@ -201,9 +206,9 @@ var mouseEventHandler = function(event, mouseState, operMode) {
         } else if(operMode == "goal") {
             createGoalPose(mouseDownPose.position.x, mouseDownPose.position.y, thetaRad);
         } else if(operMode == "wpsave") {
-            var qz = Math.sin(-thetaRad/2.0);
-            var qw = Math.cos(-thetaRad/2.0);
-            var orientation = new ROSLIB.Quaternion({
+            let qz = Math.sin(-thetaRad/2.0);
+            let qw = Math.cos(-thetaRad/2.0);
+            let orientation = new ROSLIB.Quaternion({
                 x: 0, y: 0, z: qz, w: qw
             });
             wp_array.push({
@@ -214,7 +219,7 @@ var mouseEventHandler = function(event, mouseState, operMode) {
                 },
                 orientation: orientation
             });
-            var str = String(wp_array.length) + "번째 waypoint 저장됨\n";
+            let str = String(wp_array.length) + "번째 waypoint 저장됨\n";
             status_area.value += str;
             status_area.scrollTop = status_area.scrollHeight;
         }

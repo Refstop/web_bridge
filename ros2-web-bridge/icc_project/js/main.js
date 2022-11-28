@@ -35,5 +35,9 @@ setInterval(() => {
     head_connect? head_name.style.color = "green": head_name.style.color = "red";
     tail_connect? tail_state.innerText = "연결됨": tail_state.innerText = "연결 안됨";
     tail_connect? tail_name.style.color = "green": tail_name.style.color = "red";
+    let nav_mode_msg = new ROSLIB.Message({
+        data: tail_nav
+    });
+    nav_mode.publish(nav_mode_msg);
     ros2dmap();
 }, 10);
