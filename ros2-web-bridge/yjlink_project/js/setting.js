@@ -27,6 +27,3 @@ ros.on("close", function() {
 
 // rosbridge websocket 서버와 연결을 생성
 ros.connect("ws://localhost:9090");
-
-head_namespace = "omo"
-tail_namespace = ""

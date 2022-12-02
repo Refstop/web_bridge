@@ -1,8 +1,8 @@
 // robot의 pose를 arrow로 visualize하는 파트
-const createPoseTopic = (robot_type) => {
+const createPoseTopic = () => {
     const navPoseTopic = new ROSLIB.Topic({
         ros: ros,
-        name: robot_type + "/amcl_pose",
+        name: "/amcl_pose",
         messageType: "geometry_msgs/PoseWithCovarianceStamped"
     });
     return navPoseTopic;
@@ -29,7 +29,7 @@ const createFunc = function(poseTopic, robotMarker) {
 // path 시각화
 var listenerforPath = new ROSLIB.Topic ({
     ros : ros,
-    name : head_namespace + '/local_plan',
+    name : '/local_plan',
     messageType : 'nav_msgs/Path'
 });
 gridClient.rootObject.addChild(pathShape);
@@ -47,19 +47,11 @@ listenerforPath.subscribe((message)=> {
     }
 });
 
-var headMarker = new ROS2D.NavigationArrow({
+var robotMarker = new ROS2D.NavigationArrow({
     size : 0.3,
     strokeSize : 0.01,
     fillColor: createjs.Graphics.getRGB(255, 0, 0, 0.9),
 });
 
-var tailMarker = new ROS2D.NavigationArrow({
-    size : 0.3,
-    strokeSize : 0.01,
-    fillColor: createjs.Graphics.getRGB(0, 0, 255, 0.9),
-});
-
-let headPoseTopic = createPoseTopic(head_namespace);
-let tailPoseTopic = createPoseTopic(tail_namespace);
-createFunc(headPoseTopic, headMarker);
-createFunc(tailPoseTopic, tailMarker);
+let poseTopic = createPoseTopic();
+createFunc(poseTopic, robotMarker);

@@ -1,14 +1,14 @@
-var mapTopic = new ROSLIB.Topic({
-    ros: ros,
-    topic: "omo/map",
-    messageType: "std_msgs/Bool"
-});
-var width = 0;
-var height = 0;
-mapTopic.subscribe((msg) => {
-    width = msg.info.width;
-    height = msg.info.width;
-});
+// var mapTopic = new ROSLIB.Topic({
+//     ros: ros,
+//     topic: "/map",
+//     messageType: "std_msgs/Bool"
+// });
+// var width = 0;
+// var height = 0;
+// mapTopic.subscribe((msg) => {
+//     width = msg.info.width;
+//     height = msg.info.width;
+// });
 
 var viewer = new ROS2D.Viewer({
     divID: "map",
@@ -19,7 +19,6 @@ var viewer = new ROS2D.Viewer({
 // map client 셋업
 var gridClient = new ROS2D.OccupancyGridClient({
     ros: ros,
-    // topic: head_namespace + "/map",
     rootObject: viewer.scene,
     continuous: true
 });

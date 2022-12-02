@@ -1,50 +1,25 @@
 // 토글 스위치를 사용하여, initial pose 모드와 goal pose 모드를 결정
-var head_init_check = $("input[id='head_initmode']");
-var head_init_checkbox = document.getElementById("head_initmode");
-var head_init_cb_status = document.getElementById("head_init_cb_status");
-head_init_check.click(function() {
-    head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
-    if(head_init_checkbox.checked) tail_init_checkbox.checked = false;
+var init_check = $("input[id='initmode']");
+var init_checkbox = document.getElementById("initmode");
+var init_cb_status = document.getElementById("init_cb_status");
+init_check.click(function() {
+    init_checkbox.checked? init_cb_status.innerText = "ON": init_cb_status.innerText = "OFF";
 });
 
-var head_goal_check = $("input[id='head_goalmode']");
-var head_goal_checkbox = document.getElementById("head_goalmode");
-var head_goal_cb_status = document.getElementById("head_goal_cb_status");
-head_goal_check.click(function() {
-    head_goal_checkbox.checked? head_goal_cb_status.innerText = "ON": head_goal_cb_status.innerText = "OFF";
-    if(head_goal_checkbox.checked) tail_goal_checkbox.checked = false;
-});
-
-var tail_init_check = $("input[id='tail_initmode']");
-var tail_init_checkbox = document.getElementById("tail_initmode");
-var tail_init_cb_status = document.getElementById("tail_init_cb_status");
-tail_init_check.click(function() {
-    tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
-    if(tail_init_checkbox.checked) head_init_checkbox.checked = false;
-});
-
-var tail_goal_check = $("input[id='tail_goalmode']");
-var tail_goal_checkbox = document.getElementById("tail_goalmode");
-var tail_goal_cb_status = document.getElementById("tail_goal_cb_status")
-tail_goal_check.click(function() {
-    tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
-    if(tail_goal_checkbox.checked) head_goal_checkbox.checked = false;
+var goal_check = $("input[id='goalmode']");
+var goal_checkbox = document.getElementById("goalmode");
+var goal_cb_status = document.getElementById("goal_cb_status")
+goal_check.click(function() {
+    goal_checkbox.checked? goal_cb_status.innerText = "ON": goal_cb_status.innerText = "OFF";
 });
 
 // initial pose와 goal_pose를 publish하는 함수
 var status_area = document.getElementById("status_area");
 const createInitialPose = (pose_x, pose_y, thetaRad) => {
-    if(head_init_checkbox.checked) {
-        var robot_type = head_namespace;
-    } else if(tail_init_checkbox.checked) {
-        var robot_type = tail_namespace;
-    } else {
-        return;
-    }
-    console.log(robot_type + "/initialpose");
+    if(!init_checkbox.checked) return;
     const initialPose = new ROSLIB.Topic({
         ros: ros,
-        name: robot_type + "/initialpose",
+        name: "/initialpose",
         messageType: "geometry_msgs/PoseWithCovarianceStamped"
     });
 
@@ -75,34 +50,21 @@ const createInitialPose = (pose_x, pose_y, thetaRad) => {
         }
     });
     initialPose.publish(initialpose_msg);
-    var cur_namespace = robot_type == head_namespace? "head": "tail";
-    var str = cur_namespace + " 초기 Pose: "
-                + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+    var str = "초기 Pose: " + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
     status_area.value += str;
     status_area.scrollTop = status_area.scrollHeight;
-    // head_init_checkbox.checked = !head_init_checkbox.checked;
-    // head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
-    if(head_init_checkbox.checked) {
-        head_init_checkbox.checked = !head_init_checkbox.checked;
-        head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
-    } else if(tail_init_checkbox.checked) {
-        tail_init_checkbox.checked = !tail_init_checkbox.checked;
-        tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
+    if(init_checkbox.checked) {
+        init_checkbox.checked = !init_checkbox.checked;
+        init_checkbox.checked? init_cb_status.innerText = "ON": init_cb_status.innerText = "OFF";
     }
 };
 
 const createGoalPose = (pose_x, pose_y, thetaRad) => {
-    if(head_goal_checkbox.checked) {
-        var robot_type = head_namespace;
-    } else if(tail_goal_checkbox.checked) {
-        var robot_type = tail_namespace;
-    } else {
-        return;
-    }
-    console.log(robot_type + "/goal_pose");
+    if(!goal_checkbox.checked) return;
+    
     const goal_pose = new ROSLIB.Topic({
         ros: ros,
-        name: robot_type + "/goal_pose",
+        name: "/goal_pose",
         messageType: "geometry_msgs/PoseStamped"
     });
 
@@ -130,21 +92,16 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         }
     });
     goal_pose.publish(goal_pose_msg);
-    var cur_namespace = robot_type == head_namespace? "head": "tail";
-    var str = cur_namespace + " 목표 Pose: "
-                + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+    var str = "목표 Pose: " + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
     status_area.value += str;
     status_area.scrollTop = status_area.scrollHeight;
     // head status: 배송 중/배송 대기/배송 완료
     // tail status: 배송 중/배송 완료
     // head 배송 시작(tail 추종 중)-head 배송 중-head 도착-tail 출발-head 배송 대기-tail 배송 중
     // -(사용자 확인)-tail 배송 완료-tail 복귀 중-tail 복귀 완료-head 배송 완료
-    if(head_goal_checkbox.checked) {
-        head_goal_checkbox.checked = !head_goal_checkbox.checked;
-        head_goal_checkbox.checked? head_goal_cb_status.innerText = "ON": head_goal_cb_status.innerText = "OFF";
-    } else if(tail_goal_checkbox.checked) {
-        tail_goal_checkbox.checked = !tail_goal_checkbox.checked;
-        tail_goal_checkbox.checked? tail_goal_cb_status.innerText = "ON": tail_goal_cb_status.innerText = "OFF";
+    if(goal_checkbox.checked) {
+        goal_checkbox.checked = !goal_checkbox.checked;
+        goal_checkbox.checked? goal_cb_status.innerText = "ON": goal_cb_status.innerText = "OFF";
     }
     
 };
@@ -224,13 +181,9 @@ var mouseEventHandler = function(event, mouseState, operMode) {
 
 // waypoint handler 추가
 viewer.scene.addEventListener("stagemousedown", function(event) {
-    if(head_init_checkbox.checked) {
+    if(init_checkbox.checked) {    
         mouseEventHandler(event, "down", "initial");
-    } else if(head_goal_checkbox.checked) {        
-        mouseEventHandler(event, "down", "goal");
-    } else if(tail_init_checkbox.checked) {    
-        mouseEventHandler(event, "down", "initial");
-    } else if(tail_goal_checkbox.checked) {        
+    } else if(goal_checkbox.checked) {        
         mouseEventHandler(event, "down", "goal");
     }
     if(wp_checkbox.checked) {
@@ -239,13 +192,9 @@ viewer.scene.addEventListener("stagemousedown", function(event) {
 });
 
 viewer.scene.addEventListener("stagemousemove", function(event) {
-    if(head_init_checkbox.checked) {
+    if(init_checkbox.checked) {    
         mouseEventHandler(event, "move", "initial");
-    } else if(head_goal_checkbox.checked) {        
-        mouseEventHandler(event, "move", "goal");
-    } else if(tail_init_checkbox.checked) {    
-        mouseEventHandler(event, "move", "initial");
-    } else if(tail_goal_checkbox.checked) {        
+    } else if(goal_checkbox.checked) {        
         mouseEventHandler(event, "move", "goal");
     }
     if(wp_checkbox.checked) {
@@ -254,13 +203,9 @@ viewer.scene.addEventListener("stagemousemove", function(event) {
 });
 
 viewer.scene.addEventListener("stagemouseup", function(event) {
-    if(head_init_checkbox.checked) {
+    if(init_checkbox.checked) {    
         mouseEventHandler(event, "up", "initial");
-    } else if(head_goal_checkbox.checked) {        
-        mouseEventHandler(event, "up", "goal");
-    } else if(tail_init_checkbox.checked) {    
-        mouseEventHandler(event, "up", "initial");
-    } else if(tail_goal_checkbox.checked) {        
+    } else if(goal_checkbox.checked) {        
         mouseEventHandler(event, "up", "goal");
     }
     if(wp_checkbox.checked) {

@@ -22,9 +22,9 @@
         <script type="text/javascript" src="../js/setting.js"></script>
     </head>
     <body>
-        <h1>Simple Web Navigation Tool(ROS2)</h1>
-        <p>This example will publish and subscribe and do anything</p>
+        <h1>YJLink Robot Management System(ROS2)</h1>
         <div id="statusIndicator">
+            <p style="margin: 0px 5px 0px 0px">ROS 연결상태:</p>
             <p id="connecting">Connecting to rosbridge</p>
             <p id="connected" style="color:#00D600; display:none">Connected</p>
             <p id="error" style="color:#FF0000; display:none">Error in the backend</p>
@@ -34,49 +34,25 @@
             <div id="map"></div>
             <div>
                 <h3>Pose 설정 모드</h3>
-                <p>부모 로봇</p>
                 <div class="setpose">
                     <div class="setinitpose">
                         <p>초기 Pose 설정</p>
                         <div>
                             <label class="switch">
-                                <input type="checkbox" id="head_initmode">
+                                <input type="checkbox" id="initmode">
                                 <span class="slider round"></span>
                             </label>
-                            <p id="head_init_cb_status">OFF</p>
+                            <p id="init_cb_status">OFF</p>
                         </div>
                     </div>
                     <div class="setgoalpose">
                         <p>목표 Pose 설정</p>
                         <div>
                             <label class="switch">
-                                <input type="checkbox" id="head_goalmode">
+                                <input type="checkbox" id="goalmode">
                                 <span class="slider round"></span>
                             </label>
-                            <p id="head_goal_cb_status">OFF</p>
-                        </div>
-                    </div>
-                </div>
-                <p>자식 로봇</p>
-                <div class="setpose">
-                    <div class="setinitpose">
-                        <p>초기 Pose 설정</p>
-                        <div>
-                            <label class="switch">
-                                <input type="checkbox" id="tail_initmode">
-                                <span class="slider round"></span>
-                            </label>
-                            <p id="tail_init_cb_status">OFF</p>
-                        </div>
-                    </div>
-                    <div class="setgoalpose">
-                        <p>목표 Pose 설정</p>
-                        <div>
-                            <label class="switch">
-                                <input type="checkbox" id="tail_goalmode">
-                                <span class="slider round"></span>
-                            </label>
-                            <p id="tail_goal_cb_status">OFF</p>
+                            <p id="goal_cb_status">OFF</p>
                         </div>
                     </div>
                 </div>
@@ -104,15 +80,15 @@
                     <thead>
                         <tr>
                             <th class="tg-0pky"></th>
-                            <th class="tg-0pky" id="head_name">부모 로봇</th>
-                            <th class="tg-0pky" id="tail_name">자식 로봇</th>
+                            <!-- <th class="tg-0pky" id="head_name">부모 로봇</th> -->
+                            <th class="tg-0pky" id="robot_name">자식 로봇</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td class="tg-0pky">상태</td>
-                            <td class="tg-0pky" id="head_state">연결 안됨</td>
-                            <td class="tg-0pky" id="tail_state">연결 안됨</td>
+                            <!-- <td class="tg-0pky" id="head_state">연결 안됨</td> -->
+                            <td class="tg-0pky" id="robot_state">연결 안됨</td>
                         </tr>
                     </tbody>
                 </table>
