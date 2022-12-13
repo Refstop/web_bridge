@@ -24,6 +24,9 @@ let gridClient = new ROS2D.OccupancyGridClient({
     continuous: true
 });
 
+let arrrr = [0, 1,2,3,4];
+console.log(arrrr[-1]);
+
 // map server로부터 publish된 map을 받아 viewer에 표시
 function ros2dmap() {
     gridClient.on("change", function() {

@@ -97,10 +97,9 @@ const createGoalPose = (pose_x, pose_y, thetaRad) => {
         robot_type = head_namespace;
     } else if(tail_goal_checkbox.checked) {
         robot_type = tail_namespace;
-    } else if(head_nav) {
-        // robot_type = head_namespace;
-        robot_type = tail_namespace;
-    } else if(tail_nav == "navigating") {
+    } else if(tail_state == STATUS.TRACKING) {
+        robot_type = head_namespace;
+    } else if(tail_state == STATUS.NAVIGATING) {
         robot_type = tail_namespace;
     } else {
         return;

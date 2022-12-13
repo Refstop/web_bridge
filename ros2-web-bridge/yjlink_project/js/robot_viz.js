@@ -6,7 +6,7 @@ const createPoseTopic = () => {
         messageType: "geometry_msgs/PoseWithCovarianceStamped"
     });
     return navPoseTopic;
-}
+};
 
 const createFunc = function(poseTopic, robotMarker) {
     return poseTopic.subscribe(function(pose) {
@@ -24,28 +24,26 @@ const createFunc = function(poseTopic, robotMarker) {
         }
         gridClient.rootObject.addChild(robotMarker);
     });
-}
+};
 
 // path 시각화
-var listenerforPath = new ROSLIB.Topic ({
+var listenerforPath = new ROSLIB.Topic({
     ros : ros,
-    name : '/local_plan',
+    name : '/plan',
     messageType : 'nav_msgs/Path'
 });
-gridClient.rootObject.addChild(pathShape);
 
 var pathShape = new ROS2D.PathShape({
-    strokeSize : 0.1,
+    strokeSize : 0.03,
     strokeColor : createjs.Graphics.getRGB(0, 255, 0,1),
 });
-    
-gridClient.rootObject.addChild(pathShape);
 
 listenerforPath.subscribe((message)=> {
     if(message) {
         pathShape.setPath(message);
     }
 });
+gridClient.rootObject.addChild(pathShape);
 
 var robotMarker = new ROS2D.NavigationArrow({
     size : 0.3,

@@ -20,8 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'marker_docking = marker_docking.marker_docking:main',
-            'tmp_cli = marker_docking.tmp_cli:main'
+            'marker_docking = marker_docking.marker_docking:main'
         ],
     },
 )

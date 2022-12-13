@@ -48,13 +48,12 @@ class WaypointWebClient(Node):
                 goal_pose.header.frame_id = 'map'
                 goal_pose.header.stamp = self.navigator.get_clock().now().to_msg()
                 goal_pose.pose = pose
-
                 self.goal_poses.append(goal_pose)
-    
+
     def docking_mode_callback(self, msg):
         if msg.state == DockingMode.STATUS_COMPLETE:
             self.docking_complete = True
-            self.goal_poses = self.goal_poses[-1]
+            self.goal_poses.append(self.goal_poses_last)
 
     def run(self):
         if not self.goal_poses: return
@@ -69,8 +68,8 @@ class WaypointWebClient(Node):
             if feedback and i % 5 == 0:
                 print('Executing current waypoint: ' +
                     str(feedback.current_waypoint + 1) + '/' + str(len(self.goal_poses)))
-                now = self.navigator.get_clock().now()
 
+                now = self.navigator.get_clock().now()
                 # Some navigation timeout to demo cancellation
                 if now - nav_start > Duration(seconds=180.0):
                     self.navigator.cancelTask()
@@ -80,6 +79,7 @@ class WaypointWebClient(Node):
         if result == TaskResult.SUCCEEDED:
             print('Goal succeeded!')
             self.goal_poses_last = self.goal_poses[-1]
+            self.goal_poses.clear()
             if not self.docking_complete:
                 self.docking_mode_pub.publish(DockingMode(state=DockingMode.STATUS_DOCKING))
         elif result == TaskResult.CANCELED:
@@ -88,11 +88,10 @@ class WaypointWebClient(Node):
             print('Goal failed!')
         else:
             print('Goal has an invalid return status!')
-        
+
         if self.docking_complete:
             self.docking_complete = False
-            self.goal_poses.clear()
-
+            self.goal_poses_last = None
 '''
 Follow waypoints using the ROS 2 Navigation Stack (Nav2)
 '''
@@ -105,6 +104,6 @@ def main(args=None):
 
     waypoint_web_client.destroy_node()
     rclpy.shutdown()
-  
+    
 if __name__ == '__main__':
     main()
