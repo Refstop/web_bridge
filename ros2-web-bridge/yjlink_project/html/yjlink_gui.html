@@ -33,6 +33,15 @@
         <div id="fullbody">
             <div id="map"></div>
             <div>
+                <input type="file" id="input_file">
+                <h3>목적지 설정</h3>
+                <div id="destination">
+                    <select id="marker_id">
+                        <option value="0">========= 선택 =========</option>
+                    </select>
+                    <button type="button" id="startbtn">운행 시작</button>
+                </div>
+
                 <h3>Pose 설정 모드</h3>
                 <div class="setpose">
                     <div class="setinitpose">
@@ -81,7 +90,7 @@
                         <tr>
                             <th class="tg-0pky"></th>
                             <!-- <th class="tg-0pky" id="head_name">부모 로봇</th> -->
-                            <th class="tg-0pky" id="robot_name">자식 로봇</th>
+                            <th class="tg-0pky" id="robot_name">로봇</th>
                         </tr>
                     </thead>
                     <tbody>

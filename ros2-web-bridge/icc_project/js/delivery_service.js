@@ -81,6 +81,8 @@ function navigation_pipeline() {
                 str = "배송지 도착\n";
                 status_area.value += str;
                 status_area.scrollTop = status_area.scrollHeight;
+            } else {
+                tail_state = STATUS.DEPART_BACK;
             }
         } else if(tail_state == STATUS.DEPART_BACK && tail_mode == STATUS.NAVIGATING) {
             createGoalPose(x, y, theta);

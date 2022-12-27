@@ -40,7 +40,7 @@ setInterval(() => {
         head_status.innerText = "대기";
     } else if(head_state == STATUS.DEPART_BACK) {
         head_status.innerText = "복귀";
-    } else if(head_state == HEAD_POINT) {
+    } else if(head_state == STATUS.HEAD_POINT) {
         head_status.innerText = "도착";
     }
 

@@ -19,7 +19,7 @@ let viewer = new ROS2D.Viewer({
 // map client 셋업
 let gridClient = new ROS2D.OccupancyGridClient({
     ros: ros,
-    // topic: head_namespace + "/map",
+    topic: head_namespace + "/map",
     rootObject: viewer.scene,
     continuous: true
 });

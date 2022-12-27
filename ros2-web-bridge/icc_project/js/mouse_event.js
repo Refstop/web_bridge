@@ -31,6 +31,9 @@ tail_goal_check.click(function() {
     if(tail_goal_checkbox.checked) head_goal_checkbox.checked = false;
 });
 
+// let head_init_pose = true, tail_init_pose = true;
+// let head_step = 0, tail_step = 0;
+
 // initial pose와 goal_pose를 publish하는 함수
 let status_area = document.getElementById("status_area");
 const createInitialPose = (pose_x, pose_y, thetaRad) => {
@@ -83,9 +86,45 @@ const createInitialPose = (pose_x, pose_y, thetaRad) => {
     status_area.scrollTop = status_area.scrollHeight;
     
     if(head_init_checkbox.checked) {
+        // let head_jujak = head_init_pose? " 초기 Pose: ": " 목표 Pose: ";
+        // if(head_init_pose) head_init_pose = false;
+        // head_step += 1;
+        // if(head_step == 1) {
+        //     head_state = STATUS.WAITING;
+        // } else if(head_step == 2) {
+        //     head_state = STATUS.HEAD_POINT;
+        // } else if(head_step == 3) {
+        //     head_state = STATUS.DEPART_BACK;
+        // }
+        // let str = cur_namespace + head_jujak
+        //             + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+        // status_area.value += str;
+        // status_area.scrollTop = status_area.scrollHeight;
         head_init_checkbox.checked = !head_init_checkbox.checked;
         head_init_checkbox.checked? head_init_cb_status.innerText = "ON": head_init_cb_status.innerText = "OFF";
     } else if(tail_init_checkbox.checked) {
+        // let tail_jujak = tail_init_pose? " 초기 Pose: ": " 목표 Pose: ";
+        // if(tail_init_pose) tail_init_pose = false;
+        // tail_step += 1;
+        // if(tail_step == 1) {
+        //     tail_state = STATUS.WAITING;
+        //     let str = cur_namespace + tail_jujak
+        //                 + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+        //     status_area.value += str;
+        //     status_area.scrollTop = status_area.scrollHeight;
+        // } else if(tail_step == 3) {
+        //     tail_state = STATUS.ROOM_POINT;
+        //     let str = cur_namespace + tail_jujak
+        //                 + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+        //     status_area.value += str;
+        //     status_area.scrollTop = status_area.scrollHeight;
+        // } else if(tail_step == 4) {
+        //     tail_state = STATUS.DEPART_BACK;
+        //     let str = cur_namespace + tail_jujak
+        //                 + String(pose_x.toFixed(3)) + " " + String(pose_y.toFixed(3)) + " " + String(thetaRad.toFixed(3)) + "\n";
+        //     status_area.value += str;
+        //     status_area.scrollTop = status_area.scrollHeight;
+        // }
         tail_init_checkbox.checked = !tail_init_checkbox.checked;
         tail_init_checkbox.checked? tail_init_cb_status.innerText = "ON": tail_init_cb_status.innerText = "OFF";
     }
