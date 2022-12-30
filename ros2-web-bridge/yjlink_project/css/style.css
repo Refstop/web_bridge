@@ -71,22 +71,35 @@ p {
 
 #map {
     border: 5px solid black;
-    margin: 0px 20px 0px 0px;
+    background-color: black;
+}
+
+#settings_frame {
+    width: 350px;
+    border: 5px solid black;
+    padding: 0px 15px 0px 15px;
+    align-items: center;
+}
+
+.unit {
+    padding: 0px 0px 20px 0px;
+    border-bottom: 5px solid black;
 }
 
 .setpose {
     display: flex;
+    margin: 0px 0px 8px 0px;
 }
 
 .setinitpose {
-    margin: 0px 20px 0px 0px;
+    margin: 0px 15px 0px 0px;
 }
 
 .setgoalpose {
-    margin: 0px 20px 0px 0px;
+    margin: 0px 15px 0px 0px;
 }
 
-#waypoint {
+.waypoint {
     display: flex;
 }
 
@@ -94,22 +107,21 @@ p {
     margin: 0px 20px 0px 0px;
 }
 
-#completebtn {
-    width: 100px;
-    height: 28px;
-    margin: 5px 2px 2px 2px;
+.marker_info {
+    width: 54px;
+    margin: 5px 5px 5px 0px;
 }
 
-#clearbtn {
-    width: 100px;
+.wpbtn {
+    width: 109px;
     height: 28px;
-    margin: 2px 2px 2px 2px;
+    margin: 5px 2px 2px 2px;
 }
 
 .tg {
     width: 288px;
     height: 100px;
-    border-collapse:  collapse;
+    border-collapse: collapse;
     border-spacing: 0;
     margin: 0px 0px 10px 0px;
 }
@@ -141,5 +153,6 @@ p {
 }
 
 #status_area {
+    margin: 20px 0px 0px 0px;
     overflow-y: scroll;
 }

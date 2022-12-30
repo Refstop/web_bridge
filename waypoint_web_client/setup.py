@@ -1,6 +1,10 @@
 from setuptools import setup
 
+import glob
+import os
+
 package_name = 'waypoint_web_client'
+share_dir = 'share/' + package_name
 
 setup(
     name=package_name,
@@ -9,7 +13,9 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+        (share_dir, ['package.xml']),
+        (share_dir + '/waypoints', glob.glob(os.path.join('waypoints', '*.txt'))),
+        (share_dir + '/launch', glob.glob(os.path.join('launch', '*.launch.py'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

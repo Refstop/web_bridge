@@ -1,0 +1,5 @@
+int8 STATUS_DOCKING = 1
+int8 STATUS_UNDOCKING = 2
+int8 STATUS_COMPLETE = 3
+
+int8 state

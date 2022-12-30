@@ -1,41 +1,62 @@
-// var mapTopic = new ROSLIB.Topic({
-//     ros: ros,
-//     topic: "/map",
-//     messageType: "std_msgs/Bool"
-// });
-// var width = 0;
-// var height = 0;
-// mapTopic.subscribe((msg) => {
-//     width = msg.info.width;
-//     height = msg.info.width;
-// });
+let mapTopic = new ROSLIB.Topic({
+    ros: ros,
+    topic: "map",
+    messageType: "nav_msgs/OccupancyGrid"
+});
+let map_width = 0;
+let map_height = 0;
+mapTopic.subscribe((msg) => {
+    map_width = msg.info.width;
+    map_height = msg.info.width;
+});
 
-var viewer = new ROS2D.Viewer({
+let viewer = new ROS2D.Viewer({
     divID: "map",
-    width: 508*2.5,
-    height: 296*2.5
+    // width: 283*2.5,
+    // height: 347*2.5
+    width: 1024,
+    height: 720
+    
 });
 
 // map client 셋업
-var gridClient = new ROS2D.OccupancyGridClient({
+let gridClient = new ROS2D.OccupancyGridClient({
     ros: ros,
     rootObject: viewer.scene,
     continuous: true
 });
 
-// Set up the mouse wheel event handler
-viewer.scene.addEventListener('wheel', function(event) {
-    console.log(event.deltaY);
-    // Check the delta value to determine the scroll direction
-    if (event.deltaY > 0) {
-        // Zoom out by decreasing the scale value
-        viewer.scene.scaleX *= 0.5;
-        viewer.scene.scaleY *= 0.5;
-    } else {
-        // Zoom in by increasing the scale value
-        viewer.scene.scaleX *= 2;
-        viewer.scene.scaleY *= 2;
+// Variables to store the starting position of the mouse
+let startX = null;
+let startY = null;
+
+// Add an event listener for the "mousedown" event on the canvas element
+document.getElementById('map').addEventListener('mousedown', function(event) {
+    // Store the current position of the mouse as the starting position
+    if(init_checkbox.checked || goal_checkbox.checked || wp_checkbox.checked) return;
+    startX = event.clientX;
+    startY = event.clientY;
+});
+
+// Add an event listener for the "mousemove" event on the canvas element
+document.getElementById('map').addEventListener('mousemove', function(event) {
+    if(init_checkbox.checked || goal_checkbox.checked || wp_checkbox.checked) return;
+    if (startX !== null && startY !== null) {
+        // Calculate the difference between the starting position and the current position
+        let deltaX = -(event.clientX - startX)*0.0002;
+        let deltaY = (event.clientY - startY)*0.0002;
+        
+        // Shift the map by the calculated difference
+        viewer.shift(deltaX, deltaY);
     }
+});
+
+// Add an event listener for the "mouseup" event on the canvas element
+document.getElementById('map').addEventListener('mouseup', function(event) {
+    if(init_checkbox.checked || goal_checkbox.checked || wp_checkbox.checked) return;
+    // Reset the starting position to null
+    startX = null;
+    startY = null;
 });
 
 // map server로부터 publish된 map을 받아 viewer에 표시
