@@ -12,12 +12,11 @@ def generate_launch_description():
     ld = LaunchDescription()
     
     waypoint_web_client_dir = get_package_share_directory('waypoint_web_client')
-    sparo_turtlebot4_navigation_dir = get_package_share_directory('sparo_turtlebot4_navigation')
 
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(sparo_turtlebot4_navigation_dir, 'launch', 'map_server.launch.py')
+                os.path.join(waypoint_web_client_dir, 'launch', 'map_server.launch.py')
             )
         )
     )

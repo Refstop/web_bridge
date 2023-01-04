@@ -16,6 +16,7 @@ setup(
         (share_dir, ['package.xml']),
         (share_dir + '/waypoints', glob.glob(os.path.join('waypoints', '*.txt'))),
         (share_dir + '/launch', glob.glob(os.path.join('launch', '*.launch.py'))),
+        (share_dir + '/map', glob.glob(os.path.join('map', '*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

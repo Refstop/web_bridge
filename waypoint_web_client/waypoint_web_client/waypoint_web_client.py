@@ -9,7 +9,6 @@ from ament_index_python.packages import get_package_share_directory
 from geometry_msgs.msg import Pose, Point, PoseStamped, PoseArray
 from marker_docking_interfaces.msg import DockingMode
 from std_msgs.msg import String, Int8, Bool
-from waypoint_web_client_interfaces.msg import Initialize, DisplayWaypoints
 from rclpy.duration import Duration
 
 from tf2_ros import TransformException
