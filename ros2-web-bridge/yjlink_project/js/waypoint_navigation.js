@@ -206,7 +206,7 @@ class WaypointHandler {
         
         textToSave = "";
         let wp_array_reverse = this.wp_array;
-        wp_array.reverse();
+        wp_array_reverse.reverse();
         for(let i = 0; i < wp_array_reverse.length; i++) {
             let quat = [wp_array_reverse[i].orientation.x, wp_array_reverse[i].orientation.y, 
                     wp_array_reverse[i].orientation.z, wp_array_reverse[i].orientation.w];
